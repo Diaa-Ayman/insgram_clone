@@ -1,6 +1,25 @@
-import { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Fragment, useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { auth } from "../firebase";
+
 function Signin() {
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const history = useHistory();
+
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        history.push("/feed");
+      }
+    });
+  }, []);
+  const signInHandler = (e) => {
+    e.preventDefault();
+    auth.signInWithEmailAndPassword(email, password).catch((error) => {
+      alert(error.message);
+    });
+  };
   return (
     <div className="">
       <div className="flex items-center justify-center mb-0 mt-20">
@@ -11,7 +30,10 @@ function Signin() {
           </span>
         </span>
       </div>
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96 h-4/5 m-auto mt-8">
+      <form
+        onSubmit={signInHandler}
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96 h-4/5 m-auto mt-8"
+      >
         <div className="flex justify-between items-center mb-8">
           <span className="text-lg font-bold">Log In</span>
           <img
@@ -23,11 +45,12 @@ function Signin() {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            for="username"
+            htmlFor="username"
           >
             Email
           </label>
           <input
+            onChange={(event) => setEmail(event.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
             type="text"
@@ -37,11 +60,12 @@ function Signin() {
         <div className="mb-6">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            for="password"
+            htmlFor="password"
           >
             Password
           </label>
           <input
+            onChange={(event) => setPassword(event.target.value)}
             className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"

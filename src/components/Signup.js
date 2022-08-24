@@ -1,45 +1,48 @@
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { auth } from "../firebase";
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        if (user.displayName) {
-          //
-        } else {
-          user.updateProfile({
-            displayName: username,
-          });
-        }
+  const history = useHistory();
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((authUser) => {
+  //     if (authUser) {
+  //       setUser(user);
+  //       if (authUser.displayName) {
+  //         //
+  //       } else {
+  //         authUser.updateProfile({
+  //           displayName: username,
+  //         });
+  //       }
 
-        console.log(user);
-      } else {
-        console.log("NO user");
-        setUser(null);
-      }
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, [user]);
+  //       console.log(authUser);
+  //     } else {
+  //       console.log("NO user");
+  //       setUser(null);
+  //     }
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [user]);
   const signupHandler = (event) => {
     event.preventDefault();
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        return user.updateProfile({
+      .then((authUser) => {
+        return authUser.user.updateProfile({
           displayName: username,
         });
       })
       .catch((error) => {
-        alert(error.message);
         return;
       });
+    if (username.length > 0 && password.length > 3 && email.includes("@"))
+      history.push("/feed");
+    else alert("something went wrong!");
   };
 
   return (
