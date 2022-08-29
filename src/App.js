@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { auth } from "./firebase";
 import { useEffect, useState } from "react";
+import ImageModal from "./components/ImageModal";
 function App() {
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -16,25 +17,27 @@ function App() {
     };
   }, []);
   return (
-    <Switch>
-      <Route path="/" exact>
-        <Redirect to="welcome" />
-      </Route>
-      <Route path="/welcome">
-        <SigninPage />
-      </Route>
-
-      <Route path="/signup">
-        <SignupPage />
-      </Route>
-
-      {user && (
-        <Route path="/feed">
-          <MainPage />
+    <div>
+      {/* <ImageModal /> */}
+      <Switch>
+        <Route path="/" exact>
+          <Redirect to="welcome" />
         </Route>
-      )}
-    </Switch>
+        <Route path="/welcome">
+          <SigninPage />
+        </Route>
 
+        <Route path="/signup">
+          <SignupPage />
+        </Route>
+
+        {user && (
+          <Route path="/feed">
+            <MainPage />
+          </Route>
+        )}
+      </Switch>
+    </div>
     // <Signup />
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import insta from "../assets/insta.jpg";
 import { auth } from "../firebase";
 import {
@@ -13,9 +13,16 @@ import { useHistory } from "react-router-dom";
 function Header(props) {
   const history = useHistory();
 
+  const [image, setImage] = useState(null);
   const signOutHanlder = () => {
     auth.signOut();
     history.replace("/welcome");
+  };
+  const openFilesHandler = () => {};
+  const getImageHandler = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
   };
   return (
     <div className="bg-white border-b px-4 md:px-8 lg:px-44 py-2 flex justify-between items-center shadow">
@@ -25,8 +32,16 @@ function Header(props) {
         <input placeholder="Search" className=" bg-gray-200 outline-none" />
       </div>
       <div className="">
-        <CameraIcon className="w-10 h-10 hover:text-pink-500 border rounded-full p-1 hover:cursor-pointer hover:bg-gray-300 border-gray-300 ease-in transition-all" />
-        <input type="file" className="hidden" />
+        <CameraIcon
+          onClick={openFilesHandler}
+          className="w-10 h-10 hover:text-pink-500 border rounded-full p-1 hover:cursor-pointer hover:bg-gray-300 border-gray-300 ease-in transition-all"
+        />
+        <input
+          // ref={openFilesHandler}
+          type="file"
+          onChange={getImageHandler}
+          className=""
+        />
       </div>
       <div className="items-center space-x-6 hidden md:flex ">
         <HomeIcon className="h-7 w-7" />

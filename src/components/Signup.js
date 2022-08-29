@@ -42,7 +42,7 @@ function Signup() {
       });
     if (username.length > 0 && password.length > 3 && email.includes("@"))
       history.push("/feed");
-    else alert("something went wrong!");
+    else alert("Please, Enter wright data!");
   };
 
   return (
