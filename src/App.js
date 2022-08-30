@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ImageModal from "./components/ImageModal";
 import { authActions } from "./store/authSlice";
+
 function App() {
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
   const modalShown = useSelector((state) => state.uploadImage.showModal);
   useEffect(() => {
     const unSub = auth.onAuthStateChanged((authUser) => {
@@ -35,7 +36,13 @@ function App() {
         </Route>
 
         <Route path="/signup">
-          <SignupPage />
+          {!user ? (
+            <SignupPage />
+          ) : (
+            <div className="grid place-items-center mt-32 text-lg font-bold">
+              <span> YOU NEED TO LOG OUT FIRST TO GET TO THIS BAGE</span>
+            </div>
+          )}
         </Route>
 
         {user && (

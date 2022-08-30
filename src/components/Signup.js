@@ -6,43 +6,22 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const history = useHistory();
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((authUser) => {
-  //     if (authUser) {
-  //       setUser(user);
-  //       if (authUser.displayName) {
-  //         //
-  //       } else {
-  //         authUser.updateProfile({
-  //           displayName: username,
-  //         });
-  //       }
 
-  //       console.log(authUser);
-  //     } else {
-  //       console.log("NO user");
-  //       setUser(null);
-  //     }
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [user]);
   const signupHandler = (event) => {
     event.preventDefault();
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((authUser) => {
-        return authUser.user.updateProfile({
-          displayName: username,
+    if (username.length > 0 && password.length > 3 && email.includes("@")) {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((authUser) => {
+          return authUser.user.updateProfile({
+            displayName: username,
+          });
+        })
+        .catch((error) => {
+          return;
         });
-      })
-      .catch((error) => {
-        return;
-      });
-    if (username.length > 0 && password.length > 3 && email.includes("@"))
       history.push("/feed");
-    else alert("Please, Enter wright data!");
+    } else alert("Please, Enter wright data!");
   };
 
   return (

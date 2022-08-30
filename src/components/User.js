@@ -7,7 +7,7 @@ function User(props) {
   return (
     <div className="flex items-center flex-1">
       <div
-        className={`rounded-full bg-gray-400 text-3xl grid place-items-center text-white font-bold border m-2 ${
+        className={`rounded-full bg-red-400 text-3xl grid place-items-center text-white font-bold  m-2 ${
           props.suggested ? "w-12 h-12" : "w-16 h-16"
         }`}
       >

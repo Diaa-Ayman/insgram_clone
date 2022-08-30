@@ -4,7 +4,7 @@ const UplodaImageSlice = createSlice({
   name: "uploadImage",
   initialState: {
     showModal: false,
-    curImage: "",
+    curImage: null,
   },
   reducers: {
     showImageModal(state, action) {

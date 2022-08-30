@@ -6,11 +6,13 @@ import { uploadActions } from "../store/uploadModalSlice";
 function ImageModal(props) {
   const [enteredCaption, setEnteredCaption] = useState("");
   const imageURL = useSelector((state) => state.uploadImage.curImage);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const uploadImageHandler = () => {
     db.collection("posts").add({
       timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
       image: imageURL,
+      username: user.displayName ? user.displayName : "USER",
       caption: enteredCaption,
     });
     dispatch(uploadActions.hideImageModal());
@@ -19,6 +21,7 @@ function ImageModal(props) {
 
   const hideModalHandler = () => {
     dispatch(uploadActions.hideImageModal());
+    dispatch(uploadActions.getImage(null));
   };
   return (
     <div
@@ -42,19 +45,19 @@ function ImageModal(props) {
         <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
           <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 h-[550px] flex flex-col">
-              <div className="flex-1">
+              <div className="flex-1 grid place-items-center">
                 {imageURL ? (
                   <img
                     src={imageURL}
                     alt="posted Image"
-                    className="w-full mb-4 object-contain h-96"
+                    className="w-full mb-4 object-cover object-top h-96"
                   />
                 ) : (
-                  <span>Loading...</span>
+                  <span className="font-semibold text-lg">Loading...</span>
                 )}
               </div>
 
-              <div className="flex items-center space-x-2 bg-green-400 rounded-md">
+              <div className="flex overflow-hidden w-full items-center space-x-2 bg-green-400 rounded-md">
                 <input
                   onChange={(e) => setEnteredCaption(e.target.value)}
                   placeholder="Enter a Caption!"
