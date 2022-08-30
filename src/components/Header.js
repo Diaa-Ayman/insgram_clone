@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import insta from "../assets/insta.jpg";
-import { auth } from "../firebase";
+import { auth, storage } from "../firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadActions } from "../store/uploadModalSlice";
 import {
   HeartIcon,
   SearchIcon,
@@ -10,20 +12,52 @@ import {
 } from "@heroicons/react/outline";
 import { UserCircleIcon, HomeIcon } from "@heroicons/react/solid";
 import { useHistory } from "react-router-dom";
-function Header(props) {
-  const history = useHistory();
 
-  const [image, setImage] = useState(null);
+function Header(props) {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const fileInputRef = useRef();
   const signOutHanlder = () => {
     auth.signOut();
     history.replace("/welcome");
   };
-  const openFilesHandler = () => {};
   const getImageHandler = (e) => {
     if (e.target.files[0]) {
-      setImage(e.target.files[0]);
+      const image = e.target.files[0];
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // handle progress
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+        },
+        (error) => {
+          // handle error
+          console.log(error.message);
+        },
+        () => {
+          // get URL
+
+          storage
+            .ref("images")
+            .child(image.name)
+            .getDownloadURL()
+            .then((url) => {
+              // db.collection("posts").add({
+              //   timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+              //   imageURL: url,
+              // });
+              dispatch(uploadActions.getImage(url));
+            });
+        }
+      );
     }
+    dispatch(uploadActions.showImageModal());
   };
+
   return (
     <div className="bg-white border-b px-4 md:px-8 lg:px-44 py-2 flex justify-between items-center shadow">
       <img className="w-28 h-12" src={insta} alt="insgram word" />
@@ -33,14 +67,15 @@ function Header(props) {
       </div>
       <div className="">
         <CameraIcon
-          onClick={openFilesHandler}
+          onClick={() => fileInputRef.current.click()}
+          // onClick={showModalHandler}
           className="w-10 h-10 hover:text-pink-500 border rounded-full p-1 hover:cursor-pointer hover:bg-gray-300 border-gray-300 ease-in transition-all"
         />
         <input
-          // ref={openFilesHandler}
+          ref={fileInputRef}
           type="file"
           onChange={getImageHandler}
-          className=""
+          className="hidden"
         />
       </div>
       <div className="items-center space-x-6 hidden md:flex ">
@@ -58,7 +93,7 @@ function Header(props) {
           Log Out
         </button>
         <div className="rounded-full bg-gray-400 text-xl grid place-items-center text-white font-bold border  w-8 h-8">
-          {props.user && props.user.displayName[0].toUpperCase()}
+          {user ? user.displayName[0].toUpperCase() : <span>..</span>}
         </div>
       </div>
     </div>

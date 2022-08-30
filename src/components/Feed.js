@@ -55,16 +55,10 @@ function Feed() {
   return (
     <div className=" flex flex-col flex-1 items-center">
       {posts.length > 0 ? (
-        posts.map(({ id, post }) => (
-          <Post
-            key={id}
-            username={post.username}
-            avatar={post.avatar}
-            image={post.image}
-          />
-        ))
+        posts.map(({ id, post }) => <Post key={id} image={post.image} />)
       ) : (
-        <div className="mt-24 border-4 animate-spin border-blue-600 w-10 h-10 rounded-full border-b-gray-100"></div>
+        <div>NO POSTS</div>
+        // <div className="mt-24 border-4 animate-spin border-blue-600 w-10 h-10 rounded-full border-b-gray-100"></div>
       )}
     </div>
   );

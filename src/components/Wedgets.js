@@ -4,8 +4,8 @@ import { auth } from "../firebase";
 import { useHistory } from "react-router-dom";
 const array = [1, 2, 3, 4, 5];
 
-function Wedgets(props) {
-  console.log(props.user);
+function Wedgets() {
+  // console.log(props.user);
   const history = useHistory();
   const signOutHanlder = () => {
     auth.signOut();
@@ -14,7 +14,7 @@ function Wedgets(props) {
   return (
     <div className="hidden lg:block">
       <div className="userInfo flex items-cetner space-x-20">
-        <User user={props.user} />
+        <User />
         <button
           className="text-blue-500 font-medium text-sm"
           onClick={signOutHanlder}

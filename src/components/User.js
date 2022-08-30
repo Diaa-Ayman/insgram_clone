@@ -1,7 +1,9 @@
 import React from "react";
-import { UserCircleIcon } from "@heroicons/react/solid";
-
+import { useSelector } from "react-redux";
 function User(props) {
+  const user = useSelector((state) => state.auth.user);
+
+  const isUser = user && !props.suggested;
   return (
     <div className="flex items-center flex-1">
       <div
@@ -9,15 +11,13 @@ function User(props) {
           props.suggested ? "w-12 h-12" : "w-16 h-16"
         }`}
       >
-        {props.user && props.user.displayName[0].toUpperCase()}
+        {isUser ? user.displayName[0].toUpperCase() : <span>U</span>}
       </div>
       <div className="">
         <p className="text-base font-semibold">
-          {props.user ? props.user.email : "USER"}
+          {isUser ? user.email : "user@user.com"}
         </p>
-        <p className="text-xs">
-          {props.user ? props.user.displayName : "USER"}
-        </p>
+        <p className="text-xs">{isUser ? user.displayName : "user user"}</p>
       </div>
     </div>
   );

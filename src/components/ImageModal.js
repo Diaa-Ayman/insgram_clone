@@ -1,38 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { db, storage } from "../firebase";
 import firebase from "firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadActions } from "../store/uploadModalSlice";
 function ImageModal(props) {
+  const [enteredCaption, setEnteredCaption] = useState("");
+  const imageURL = useSelector((state) => state.uploadImage.curImage);
+  const dispatch = useDispatch();
   const uploadImageHandler = () => {
-    const uploadTask = storage
-      .ref(`images/${props.image.name}`)
-      .put(props.image);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // handle progress
-      },
-      (error) => {
-        // handle error
-      },
-      () => {
-        // get URL
+    db.collection("posts").add({
+      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+      image: imageURL,
+      caption: enteredCaption,
+    });
+    dispatch(uploadActions.hideImageModal());
+    dispatch(uploadActions.getImage(null));
+  };
 
-        storage
-          .ref("images")
-          .child(props.image.name)
-          .getDownloadURL()
-          .then((url) => {
-            db.collection("posts").add({
-              timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-              imageURL: url,
-            });
-          });
-      }
-    );
+  const hideModalHandler = () => {
+    dispatch(uploadActions.hideImageModal());
   };
   return (
     <div
-      class="relative z-10"
+      className="relative z-10"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
@@ -47,13 +37,42 @@ function ImageModal(props) {
       From: "opacity-100"
       To: "opacity-0"
   --> */}
-      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      <div className="fixed z-10 inset-0 overflow-y-auto">
+        <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
+          <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 h-[550px] flex flex-col">
+              <div className="flex-1">
+                {imageURL ? (
+                  <img
+                    src={imageURL}
+                    alt="posted Image"
+                    className="w-full mb-4 object-contain h-96"
+                  />
+                ) : (
+                  <span>Loading...</span>
+                )}
+              </div>
 
-      <div class="fixed z-10 inset-0 overflow-y-auto">
-        <div class="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
-          <div class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <button onClick={uploadImageHandler}>UPLOAD</button>
+              <div className="flex items-center space-x-2 bg-green-400 rounded-md">
+                <input
+                  onChange={(e) => setEnteredCaption(e.target.value)}
+                  placeholder="Enter a Caption!"
+                  className="flex-1 outline-none rounded-md p-2 bg-green-400 placeholder-white"
+                />
+                <button
+                  className="p-2 text-white font-medium  hover:bg-green-700"
+                  onClick={uploadImageHandler}
+                >
+                  UPLOAD
+                </button>
+                <button
+                  className="text-red-600 p-2 text-sm"
+                  onClick={hideModalHandler}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -63,3 +82,27 @@ function ImageModal(props) {
 }
 
 export default ImageModal;
+
+// Start of Modal in TailwindCSS...
+
+{
+  /* <div
+class="relative z-10"
+aria-labelledby="modal-title"
+role="dialog"
+aria-modal="true"
+> 
+<div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+<div className="fixed z-10 inset-0 overflow-y-auto">
+  <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
+    <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+      <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+DATA ............
+        <img src="" alt="posted Image" className=""/>
+        <button onClick={uploadImageHandler}>UPLOAD</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div> */
+}
