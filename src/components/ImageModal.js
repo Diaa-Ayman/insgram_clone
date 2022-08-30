@@ -50,7 +50,7 @@ function ImageModal(props) {
                   <img
                     src={imageURL}
                     alt="posted Image"
-                    className="w-full  object-cover object-top h-96"
+                    className="w-full h-96 object-contain"
                   />
                 ) : (
                   <span className="font-semibold text-lg">Loading...</span>
