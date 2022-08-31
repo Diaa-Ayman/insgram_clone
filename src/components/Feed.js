@@ -58,6 +58,7 @@ function Feed() {
         posts.map(({ id, post }) => (
           <Post
             key={id}
+            postId={id}
             image={post.image}
             username={post.username}
             timeStamp={post.timeStamp}
