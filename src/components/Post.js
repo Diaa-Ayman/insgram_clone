@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { DotsHorizontalIcon } from "@heroicons/react/solid";
+import {
+  DotsHorizontalIcon,
+  HeartIcon as SolidHeart,
+} from "@heroicons/react/solid";
 import { useSelector } from "react-redux";
 import firebase from "firebase";
 import {
@@ -16,6 +19,7 @@ function Post({ image, username, caption, timeStamp, postId }) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const [giveLove, setGiveLove] = useState(false);
   useEffect(() => {
     // fetch data of comments from server
     if (postId) {
@@ -51,6 +55,10 @@ function Post({ image, username, caption, timeStamp, postId }) {
     setShowComments((prev) => !prev);
   };
 
+  const giveLoveHandler = (event) => {
+    event.target.style = "fontSize: 30px";
+    setGiveLove((love) => !love);
+  };
   let changeableWord = "";
   if (showComments) {
     changeableWord = "hide";
@@ -123,9 +131,19 @@ function Post({ image, username, caption, timeStamp, postId }) {
         )}
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center space-x-2">
-            <HeartIcon className="w-7 h-7" />
+            {giveLove ? (
+              <SolidHeart
+                className="w-7 h-7 cursor-pointer text-pink-500"
+                onClick={giveLoveHandler}
+              />
+            ) : (
+              <HeartIcon
+                className="w-7 h-7 cursor-pointer hover:text-pink-500"
+                onClick={giveLoveHandler}
+              />
+            )}
             <ChatIcon className="w-7 h-7" />
-            <ShareIcon className="w-7 h-7" />
+            <ShareIcon className="w-5 h-5" />
           </div>
           <BookmarkIcon className="w-7 h-7" />
         </div>

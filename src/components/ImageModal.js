@@ -43,7 +43,7 @@ function ImageModal(props) {
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
       <div className="fixed z-10 inset-0 overflow-y-auto">
         <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
-          <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+          <div className="relative bg-white text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
             <div className="bg-white h-[550px] flex flex-col">
               <div className="flex-1 grid place-items-center">
                 {imageURL ? (
@@ -61,7 +61,7 @@ function ImageModal(props) {
                 <input
                   onChange={(e) => setEnteredCaption(e.target.value)}
                   placeholder="Enter a Caption!"
-                  className="flex-1 outline-none rounded-md p-4 bg-green-400 placeholder-white"
+                  className="flex-1 outline-none rounded-md p-4 bg-green-400 placeholder-white text-sm transition-all"
                 />
                 <button
                   className="p-4 text-white font-medium  hover:bg-green-700 "
@@ -70,7 +70,7 @@ function ImageModal(props) {
                   UPLOAD
                 </button>
                 <button
-                  className="text-red-600 p-4 text-sm"
+                  className="text-red-600 p-2 text-sm hover:font-medium"
                   onClick={hideModalHandler}
                 >
                   Cancel

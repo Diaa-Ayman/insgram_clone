@@ -36,13 +36,7 @@ function App() {
         </Route>
 
         <Route path="/signup">
-          {!user ? (
-            <SignupPage />
-          ) : (
-            <div className="grid place-items-center mt-32 text-lg font-bold">
-              <span> YOU NEED TO LOG OUT FIRST TO GET TO THIS BAGE</span>
-            </div>
-          )}
+        <SignupPage />
         </Route>
 
         {user && (

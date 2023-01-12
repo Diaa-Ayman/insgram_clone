@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import User from "./User";
 import { auth } from "../firebase";
 import { useHistory } from "react-router-dom";
@@ -9,7 +9,7 @@ function Wedgets() {
   const history = useHistory();
   const signOutHanlder = () => {
     auth.signOut();
-    history.replace("/welcome");
+    history.push("/welcome");
   };
   return (
     <div className="hidden lg:block">
@@ -33,7 +33,7 @@ function Wedgets() {
           {array.map((ele, index) => (
             <div key={index} className="flex items-center justify-between">
               <User suggested />
-              <button className="text-blue-500 font-medium text-sm">
+              <button className="text-blue-500 font-medium text-sm hover:text-blue-800">
                 Follow
               </button>
             </div>

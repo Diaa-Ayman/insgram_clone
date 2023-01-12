@@ -40,7 +40,6 @@ import { db } from "../firebase";
 // ];
 function Feed() {
   const [posts, setPosts] = useState([]);
-
   useEffect(() => {
     db.collection("posts").onSnapshot((snapshot) => {
       const data = snapshot.docs.map((doc) => {
